@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cresento - Elite AI Performance Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #0A3D2E;
+            --accent-green: #145A32;
+            --light-green: #1E8449;
+            --black: #000000;
+            --dark-gray: #1a1a1a;
+            --white: #ffffff;
+            --text-gray: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 5%;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--light-green);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 20px rgba(30, 132, 73, 0.8);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--light-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            border-radius: 25px;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light-green);
+            border: 2px solid var(--light-green);
+        }
+
+        .btn-login:hover {
+            background: var(--light-green);
+            color: var(--black);
+            box-shadow: 0 0 20px rgba(30, 132, 73, 0.5);
+        }
+
+        .btn-signup {
+            background: var(--light-green);
+            color: var(--white);
+        }
+
+        .btn-signup:hover {
+            background: var(--accent-green);
+            box-shadow: 0 0 20px rgba(30, 132, 73, 0.5);
+        }
+
+        /* Hero Section with Video */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--black) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder {
+            width: 80%;
+            max-width: 800px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--light-green);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(30, 132, 73, 0.3);
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(30, 132, 73, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .play-button::after {
+            content: '▶';
+            color: white;
+            font-size: 2rem;
+            margin-left: 5px;
+        }
+
+        .video-placeholder:hover .play-button {
+            transform: scale(1.1);
+            background: var(--light-green);
+        }
+
+        /* About Section */
+        .section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .about {
+            background: var(--dark-gray);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(30, 132, 73, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--light-green);
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-content {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-gray);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Product Section */
+        .product {
+            background: var(--black);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .product-image {
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
+            height: 500px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .product-image::after {
+            content: 'AI SHIN GUARDS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 3px;
+        }
+
+        .product-info h3 {
+            font-size: 2.5rem;
+            color: var(--light-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-info p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: var(--light-green);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-green);
+            box-shadow: 0 10px 30px rgba(30, 132, 73, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--dark-gray);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(30, 132, 73, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(30, 132, 73, 0.1) 0%, transparent 70%);
+            transition: all 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            top: -150%;
+            left: -150%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(30, 132, 73, 0.2);
+            border-color: var(--light-green);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--light-green);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.5rem;
+            color: var(--light-green);
+            margin-bottom: 1rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            background: var(--black);
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(20, 90, 50, 0.1), rgba(10, 61, 46, 0.2));
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--light-green);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            border-color: var(--light-green);
+            box-shadow: 0 20px 40px rgba(30, 132, 73, 0.3);
+        }
+
+        .price {
+            font-size: 3rem;
+            color: var(--light-green);
+            margin: 1.5rem 0;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-gray);
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background: var(--primary-green);
+            text-align: center;
+            padding: 4rem 5%;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 2rem auto 0;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: var(--black);
+            color: var(--light-green);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--white);
+            color: var(--primary-green);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--dark-gray);
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            padding: 2rem;
+        }
+
+        .contact-item h4 {
+            color: var(--light-green);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid rgba(30, 132, 73, 0.3);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--light-green);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .product {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">CRESENTO</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#product">Product</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-login" onclick="showLogin()">Log In</button>
+                <button class="btn btn-signup" onclick="showSignup()">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video -->
+    <section class="hero">
+        <div class="video-background">
+            <div class="video-placeholder" onclick="playVideo()">
+                <div class="play-button"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <h2 class="section-title fade-in">About Cresento</h2>
+        <div class="about-content fade-in">
+            <p>Cresento represents the pinnacle of sports technology innovation. Our AI-powered shin guards don't just protect – they transform how elite athletes train, compete, and evolve. By seamlessly integrating cutting-edge sensors with advanced machine learning, we deliver real-time performance insights that were once impossible to capture.</p>
+            <br>
+            <p>Designed for professionals who demand excellence, Cresento provides instant AI coaching feedback, comprehensive performance metrics, and community leaderboards that drive competitive excellence. Join the revolution in sports performance technology.</p>
+        </div>
+    </section>
+
+    <!-- Product Section -->
+    <section id="product" class="section product">
+        <div class="product-image fade-in"></div>
+        <div class="product-info fade-in">
+            <h3>Revolutionary AI Shin Guards</h3>
+            <p>Experience the future of athletic performance with our premium AI-integrated shin guards. Engineered with aerospace-grade materials and equipped with state-of-the-art sensors, Cresento captures every movement, impact, and technique with unprecedented precision.</p>
+            <p>Our proprietary AI algorithms analyze your performance in real-time, providing instant coaching feedback that helps you refine your technique, prevent injuries, and unlock your full potential.</p>
+            <a href="#pricing" class="cta-button">Explore Models</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features">
+        <h2 class="section-title fade-in">Elite Features</h2>
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h4>Real-Time AI Coaching</h4>
+                <p>Receive instant feedback on technique, positioning, and performance metrics during training and matches.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h4>Advanced Analytics</h4>
+                <p>Track speed, acceleration, impact force, distance covered, and over 50 other performance metrics.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🏆</div>
+                <h4>Community Leaderboards</h4>
+                <p>Compete with athletes worldwide, compare statistics, and climb the rankings in your position.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛡️</div>
+                <h4>Injury Prevention</h4>
+                <p>AI monitors fatigue levels and movement patterns to predict and prevent potential injuries.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📱</div>
+                <h4>Premium App Integration</h4>
+                <p>Seamlessly sync with our exclusive app for detailed analysis, progress tracking, and personalized training plans.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔋</div>
+                <h4>Extended Battery Life</h4>
+                <p>Train for weeks with our ultra-efficient power system. Quick wireless charging keeps you ready.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section pricing">
+        <h2 class="section-title fade-in">Premium Models</h2>
+        <div class="pricing-container">
+            <div class="pricing-card fade-in">
+                <h3>Professional</h3>
+                <div class="price">$899<span>/pair</span></div>
+                <ul style="list-style: none; padding: 0; margin: 2rem 0;">
+                    <li>✓ Core AI Coaching</li>
+                    <li>✓ 25+ Performance Metrics</li>
+                    <li>✓ Mobile App Access</li>
+                    <li>✓ Community Features</li>
+                    <li>✓ 3-Week Battery Life</li>
+                </ul>
+                <button class="cta-button">Select Professional</button>
+            </div>
+            <div class="pricing-card featured fade-in">
+                <h3>Elite</h3>
+                <div class="price">$1,499<span>/pair</span></div>
+                <ul style="list-style: none; padding: 0; margin: 2rem 0;">
+                    <li>✓ Advanced AI Coaching</li>
+                    <li>✓ 50+ Performance Metrics</li>
+                    <li>✓ Priority Support</li>
+                    <li>✓ Custom Training Plans</li>
+                    <li>✓ Team Analytics</li>
+                    <li>✓ 5-Week Battery Life</li>
+                </ul>
+                <button class="cta-button">Select Elite</button>
+            </div>
+            <div class="pricing-card fade-in">
+                <h3>Team Edition</h3>
+                <div class="price">Custom<span>/pricing</span></div>
+                <ul style="list-style: none; padding: 0; margin: 2rem 0;">
+                    <li>✓ Full Team Integration</li>
+                    <li>✓ Coach Dashboard</li>
+                    <li>✓ Unlimited Metrics</li>
+                    <li>✓ API Access</li>
+                    <li>✓ Dedicated Support</li>
+                </ul>
+                <button class="cta-button">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <h2 class="section-title">Stay at the Forefront</h2>
+        <p>Be the first to know about new features, exclusive offers, and performance insights.</p>
+        <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+            <input type="email" placeholder="Enter your email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <h2 class="section-title fade-in">Get in Touch</h2>
+        <div class="contact-info">
+            <div class="contact-item fade-in">
+                <h4>Email</h4>
+                <p>elite@cresento.com</p>
+            </div>
+            <div class="contact-item fade-in">
+                <h4>Phone</h4>
+                <p>+1 (888) 273-7368</p>
+            </div>
+            <div class="contact-item fade-in">
+                <h4>Headquarters</h4>
+                <p>Silicon Valley, CA</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Cresento. Elevating Athletic Excellence.</p>
+        <div class="social-links">
+            <a href="#">📘</a>
+            <a href="#">🐦</a>
+            <a href="#">📷</a>
+            <a href="#">💼</a>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.2s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(0, 0, 0, 0.98)';
+                nav.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
+            } else {
+                nav.style.background = 'rgba(0, 0, 0, 0.95)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Video player simulation
+        function playVideo() {
+            alert('Video player would open here. In production, this would play your product introduction video.');
+        }
+
+        // Auth functions
+        function showLogin() {
+            alert('Login modal would appear here. This would contain email/password fields and social login options.');
+        }
+
+        function showSignup() {
+            alert('Sign up modal would appear here. This would include registration form with email verification.');
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing! We'll send updates to ${email}`);
+            e.target.reset();
+        }
+
+        // Add hover effect to pricing cards
+        document.querySelectorAll('.pricing-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('featured')) {
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -4,9 +4,8 @@
   "description": "AI-powered shin guards website for elite athletes - Premium sports performance tracking technology",
   "main": "index.html",
   "scripts": {
-    "start": "node cresento-backend/server.js",
-    "build": "echo 'Build completed'",
-    "dev": "node cresento-backend/server.js"
+    "build": "echo 'Static site - no build needed'",
+    "start": "echo 'Static site ready'"
   },
   "keywords": [
     "ai",
@@ -17,8 +16,5 @@
     "tracking"
   ],
   "author": "Cresento Team",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "license": "MIT"
 }
