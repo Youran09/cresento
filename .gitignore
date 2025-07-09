@@ -1,5 +1,6 @@
 # Dependencies
-node_modules/
+cresento-frontend/node_modules/
+cresento-backend/node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
