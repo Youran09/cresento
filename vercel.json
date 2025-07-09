@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "cresento-website",
+  "public": true,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/cresento-frontend/public/index.html"
+    }
+  ]
+}
